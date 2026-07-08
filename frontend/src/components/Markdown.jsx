@@ -19,7 +19,7 @@ function render(src) {
   src = src.replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => {
     const i = blocks.length;
     blocks.push({ lang: lang || "", code });
-    return `\BLOCK${i}\`;
+    return "\\BLOCK" + i + "\\";
   });
 
   // inline code
