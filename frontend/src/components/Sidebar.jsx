@@ -74,6 +74,6 @@ export default function Sidebar() {
           </div>
         )}
       </div>
-    </aside>w
+    </aside>
   );
 }
