@@ -10,7 +10,9 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem("dragon_token");
     if (!token) { setUser(false); setReady(true); return; }
-    api.get("/auth/me")
+    
+    // THE FIX: We are explicitly attaching the token to the header so the backend lets us in!
+    api.get("/auth/me", { headers: { Authorization: `Bearer ${token}` } })
       .then((r) => setUser(r.data))
       .catch(() => { localStorage.removeItem("dragon_token"); setUser(false); })
       .finally(() => setReady(true));
