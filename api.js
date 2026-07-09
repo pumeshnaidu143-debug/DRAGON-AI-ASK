@@ -1,13 +1,16 @@
 import axios from "axios";
 
-const BACKEND_URL = https://dragon-ai-ask-2.onrender.com;
+const BACKEND_URL = "https://dragon-ai-ask-2.onrender.com";
 export const API = `${BACKEND_URL}/api`;
 
 const api = axios.create({ baseURL: API });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("dragon_token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
