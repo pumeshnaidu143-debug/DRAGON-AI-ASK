@@ -93,6 +93,8 @@ def create_access_token(user_id: str, email: str) -> str:
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGO)
 
 async def get_current_user(request: Request) -> dict:
+    # BYPASS AUTH: Everyone is automatically a VIP guest
+    return {"id": "public_guest_id", "email": "guest@dragon.ai", "name": "Guest Developer"}    # BYPASS AUTH: Everyone is automatically a VIP guest     return {"id": "public_guest_id", "email": "guest@dragon.ai", "name": "Guest Developer"}     # BYPASS AUTH: Everyone is automatically a VIP guest     return {"id": "public_guest_id", "email": "guest@dragon.ai", "name": "Guest Developer"}     # BYPASS AUTH: Everyone is automatically a VIP guest     return {"id": "public_guest_id", "email": "guest@dragon.ai", "name": "Guest Developer"}
     auth = request.headers.get("Authorization", "")
     token = auth[7:] if auth.startswith("Bearer ") else None
     if not token:
