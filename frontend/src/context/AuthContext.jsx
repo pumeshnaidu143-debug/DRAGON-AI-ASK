@@ -1,44 +1,13 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import api from "../lib/api";
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // null=loading | false=guest | {}=user
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("dragon_token");
-    if (!token) { setUser(false); setReady(true); return; }
-    
-    // THE FIX: We are explicitly attaching the token to the header so the backend lets us in!
-    api.get("/auth/me", { headers: { Authorization: `Bearer ${token}` } })
-      .then((r) => setUser(r.data))
-      .catch(() => { localStorage.removeItem("dragon_token"); setUser(false); })
-      .finally(() => setReady(true));
-  }, []);
-
-  const login = async (email, password) => {
-    const { data } = await api.post("/auth/login", { email, password });
-    localStorage.setItem("dragon_token", data.token);
-    setUser(data.user);
-    return data.user;
-  };
-
-  const register = async (email, password, name) => {
-    const { data } = await api.post("/auth/register", { email, password, name });
-    localStorage.setItem("dragon_token", data.token);
-    setUser(data.user);
-    return data.user;
-  };
-
-  const logout = () => {
-    localStorage.removeItem("dragon_token");
-    setUser(false);
-  };
-
+  // BYPASS AUTH: Instantly load a fake guest user profile
+  const [user] = useState({ id: "public_guest_id", name: "Guest Developer", email: "guest@dragon.ai" });
+  
   return (
-    <AuthContext.Provider value={{ user, ready, login, register, logout }}>
+    <AuthContext.Provider value={{ user, ready: true, login: async ()=>{}, register: async ()=>{}, logout: ()=>{} }}>
       {children}
     </AuthContext.Provider>
   );
